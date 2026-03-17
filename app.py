@@ -272,22 +272,25 @@ def seed_data():
 
 # ── Init ─────────────────────────────────────────────────────────────────────
 
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        # Admin
-        if not User.query.filter_by(role="admin").first():
-            admin = User(
-                full_name="Admin",
-                phone="admin",
-                password=generate_password_hash("admin123"),
-                role="admin",
-            )
-            db.session.add(admin)
-            db.session.commit()
-            print("Success: Admin created -> phone: admin | password: admin123")
-        
-        # Seed
-        seed_data()
+@app.before_request
+def initialize_database():
+    app.before_request_funcs[None].remove(initialize_database)
+    
+    db.create_all()
+    # Admin
+    if not User.query.filter_by(role="admin").first():
+        admin = User(
+            full_name="Admin",
+            phone="admin",
+            password=generate_password_hash("admin123"),
+            role="admin",
+        )
+        db.session.add(admin)
+        db.session.commit()
+        print("Success: Admin created -> phone: admin | password: admin123")
+    
+    # Seed
+    seed_data()
 
+if __name__ == "__main__":
     app.run(debug=True)
