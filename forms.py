@@ -5,9 +5,6 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from models import User
-
-
 class RegisterForm(FlaskForm):
     full_name = StringField("Ism Familiya", validators=[DataRequired(), Length(2, 100)])
     phone = StringField("Telefon raqam", validators=[DataRequired()])
@@ -15,11 +12,6 @@ class RegisterForm(FlaskForm):
     confirm = PasswordField("Parolni tasdiqlang",
                             validators=[DataRequired(), EqualTo("password", message="Parollar mos emas")])
     submit = SubmitField("Ro'yxatdan o'tish")
-
-    def validate_phone(self, field):
-        user = User.query.filter_by(phone=field.data).first()
-        if user:
-            raise ValidationError("Bu telefon raqam allaqachon ro'yxatdan o'tgan")
 
 
 class LoginForm(FlaskForm):
