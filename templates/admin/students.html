@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}O'quvchilar ro'yxati - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 p-0">
+            <div class="admin-sidebar p-3 py-5">
+                <h5 class="text-white mb-4 px-3 fw-bold">Admin Panel</h5>
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home me-2"></i> Boshqaruv</a>
+                <a href="{{ url_for('admin_courses') }}"><i class="fas fa-book me-2"></i> Kurslar</a>
+                <a href="{{ url_for('admin_teachers') }}"><i class="fas fa-users-cog me-2"></i> O'qituvchilar</a>
+                <a href="{{ url_for('admin_students') }}" class="active"><i class="fas fa-user-graduate me-2"></i> O'quvchilar</a>
+            </div>
+        </div>
+        <div class="col-md-10 p-4">
+            <h2 class="fw-bold mb-4">Ro'yxatdan o'tgan o'quvchilar</h2>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">F.I.SH</th>
+                                    <th>Telefon</th>
+                                    <th>Kurslar soni</th>
+                                    <th>Sana</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in students %}
+                                <tr>
+                                    <td class="ps-4 fw-medium">{{ student.full_name }}</td>
+                                    <td><code class="text-primary">{{ student.phone }}</code></td>
+                                    <td><span class="badge bg-secondary rounded-pill">{{ student.enrollments|length }}</span></td>
+                                    <td class="text-muted small">Ro'yxatga olingan</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

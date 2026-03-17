@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}O'qituvchilar boshqaruvi - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 p-0">
+            <div class="admin-sidebar p-3 py-5">
+                <h5 class="text-white mb-4 px-3 fw-bold">Admin Panel</h5>
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-home me-2"></i> Boshqaruv</a>
+                <a href="{{ url_for('admin_courses') }}"><i class="fas fa-book me-2"></i> Kurslar</a>
+                <a href="{{ url_for('admin_teachers') }}" class="active"><i class="fas fa-users-cog me-2"></i> O'qituvchilar</a>
+                <a href="{{ url_for('admin_students') }}"><i class="fas fa-user-graduate me-2"></i> O'quvchilar</a>
+            </div>
+        </div>
+        <div class="col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold">O'qituvchilar</h2>
+                <button class="btn btn-primary rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#addTeacherModal">
+                    <i class="fas fa-plus me-1"></i> Yangi o'qituvchi
+                </button>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Ism familiyasi</th>
+                                    <th>Fan/Yo'nalish</th>
+                                    <th class="text-end pe-4">Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for teacher in teachers %}
+                                <tr>
+                                    <td class="ps-4 fw-medium">{{ teacher.full_name }}</td>
+                                    <td><span class="badge bg-primary-subtle text-primary">{{ teacher.subject }}</span></td>
+                                    <td class="text-end pe-4">
+                                        <a href="{{ url_for('admin_delete_teacher', teacher_id=teacher.id) }}" class="btn btn-sm btn-outline-danger rounded-circle" onclick="return confirm('Ishonchingiz komilmi?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addTeacherModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-0">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Yangi o'qituvchi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ url_for('admin_add_teacher') }}" method="POST">
+                <div class="modal-body">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Ism familiyasi</label>
+                        {{ form.full_name(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Fan</label>
+                        {{ form.subject(class="form-control", placeholder="Masalan: Matematika") }}
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
